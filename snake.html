@@ -4,19 +4,41 @@
 <!-- JS code that projects the game logic onto the canvas -->
 <script>
   window.onload = initCanvas();
+  initGame();
 
   /**
    * Initializes the Canvas (The area in which the game will take place).
    */
   function initCanvas() {
-
+    canvas = document.getElementById("snakeCanvas");
+    context = canvas.getContext("2d");
+    document.addEventListener("keydown", keyPressed);
+    tiles_per_row = 16; // Canvas consists of 16 x 16 tiles
+    tile_size = canvas.width / tiles_per_row; // Size of one tile in pixels
+    REFRESH_RATE = 5; // The game speed: How many times the canvas will be updated per second
+    setInterval(update, 1000 / REFRESH_RATE);
   }
 
   /**
    * Initializes the game itself, including starting states for the snake, target and score.
    */
   function initGame() {
+    // Coordinates for the target
+    target_x = target_y = tiles_per_row / 2;
+    // Correspondes to the direction the snake moves
+    movement_x = movement_y = 0;
+    // The snake itself is modelled with an array, each entry corresponding to a segment of the snake, with an x and y coordinate
+    snake = [];
+    // Initial coordinates for the head of the snake
+    snake.push({
+      x: tiles_per_row / 2,
+      y: 3 * tiles_per_row / 4
+    });
+    // Initial length of the snake
+    snake_size = 1;
 
+    game_over = false;
+    score = 0;
   }
 
   /**
