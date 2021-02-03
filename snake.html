@@ -16,7 +16,7 @@
     tiles_per_row = 16; // Canvas consists of 16 x 16 tiles
     tile_size = canvas.width / tiles_per_row; // Size of one tile in pixels
     REFRESH_RATE = 5; // The game speed: How many times the canvas will be updated per second
-    setInterval(update, 1000 / REFRESH_RATE);
+    setInterval(updateGame, 1000 / REFRESH_RATE);
   }
 
   /**
@@ -42,7 +42,7 @@
   }
 
   /**
-   * Transforms button presses into input for the game.
+   * Maps button presses to inputs for the game.
    * Left arrow: Snake moves to the left.
    * Up arrow: Snake moves up.
    * Right arrow: Snake moves to the right.
@@ -50,7 +50,32 @@
    * 'r' or Spacebar: Restarts the game.
    */
   function keyPressed(event) {
-
+    switch (event.keyCode) {
+      case 37: // Left
+        movement_x = -1;
+        movement_y = 0;
+        break;
+      case 38: // Up
+        movement_x = 0;
+        movement_y = -1;
+        break;
+      case 39: // Right
+        movement_x = 1;
+        movement_y = 0;
+        break;
+      case 40: // Down
+        movement_x = 0;
+        movement_y = 1;
+        break;
+      case 82: // R -> Restart
+        initGame();
+        break;
+      case 32: // Space -> Restart
+        initGame();
+        break;
+      default:
+        break;
+    }
   }
 
   /**
@@ -64,35 +89,51 @@
    * Draws the black background on the canvas.
    */
   function drawBackground() {
-
+    context.fillStyle = "black";
+    context.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   /**
    * Draws the red target on the canvas.
    */
   function drawTarget() {
-
+    context.fillStyle = "red";
+    context.fillRect(target_x * tile_size + 1, target_y * tile_size + 1, tile_size - 2, tile_size - 2);
   }
 
   /**
-   * Draws the snake on the canvas.
+   * Draws the snake in a neon green color onto the canvas.
    */
   function drawSnake() {
-
+    context.fillStyle = "Electric Lime";
+    for (var i = 0; i < snake.length; i++) {
+      context.fillRect(snake[i].x * tile_size + 1, snake[i].y * tile_size + 1, tile_size - 2, tile_size - 2);
+    }
   }
 
   /**
    * Draws the current score of the player on the canvas.
    */
   function drawScore() {
-
+    context.fillStyle = "white";
+    context.font = "20px Courier";
+    context.fontWeight = "normal";
+    context.fillText(score, 2, 20);
   }
 
   /**
    * Draws the game over text on the canvas.
    */
   function drawGameOver() {
-
+    context.fillStyle = "white";
+    context.font = "40px Courier";
+    context.fontWeight = "bold";
+    context.textAlign = "center";
+    context.fillText("GAME OVER", canvas.width / 2, canvas.width / 4);
+    context.fontWeight = "normal";
+    context.font = "20px Courier";
+    context.fillText("Press 'R' to restart", canvas.width / 2, canvas.width / 2);
+    context.textAlign = "start";
   }
 
 </script>
