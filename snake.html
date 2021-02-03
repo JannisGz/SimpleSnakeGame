@@ -85,31 +85,35 @@
     // Stop snake movement if the game is over
     if (game_over) {
       movement_x = movement_y = 0;
+    } else {
+      // Update snake position
+      last_x = snake[snake.length - 1].x; // Tail segment of the snail
+      last_y = snake[snake.length - 1].y;
+      for (var i = snake.length - 1; i > 0; i--) {
+        snake[i].x = snake[i - 1].x;
+        snake[i].y = snake[i - 1].y;
+      }
+      snake[0].x += movement_x;
+      snake[0].y += movement_y;
     }
 
-    // Update snake position
-    last_x = snake[snake_length - 1].x; // Tail segment of the snail
-    last_y = snake[snake_length - 1].y;
-    for (var i = snake.length - 1; i > 0; i--) {
-      snake[i].x = snake[i - 1].x;
-      snake[i].y = snake[i - 1].y;
-    }
-    snake[0].x += movement_x;
-    snake[0].y += movement_y;
-
-    // Check if target was reached -> Add a new segment
+    // Check if target was reached -> Add a new segment, relocate target and increase score
     if (target_x == snake[0].x && target_y == snake[0].y) {
       snake.push({
         x: last_x,
         y: last_y
       });
+      target_x = Math.floor(Math.random() * tiles_per_row);
+      target_y = Math.floor(Math.random() * tiles_per_row);
+      score += 10;
     }
 
-    // Check if game over (self collision, border collision)
+    // Check if snake head collides with a wall -> Game over 
     if (snake[0].x < 0 || snake[0].x >= tiles_per_row || snake[0].y < 0 || snake[0].y >= tiles_per_row) {
       game_over = true;
     }
 
+    // Check if snake head collides with is body -> Game over
     for (var i = 1; i < snake.length; i++) {
       if (snake[i].x == snake[0].x && snake[i].y == snake[0].y) {
         game_over = true;
@@ -148,7 +152,7 @@
    * Draws the snake in a neon green color onto the canvas.
    */
   function drawSnake() {
-    context.fillStyle = "Electric Lime";
+    context.fillStyle = "limegreen";
     for (var i = 0; i < snake.length; i++) {
       context.fillRect(snake[i].x * tile_size + 1, snake[i].y * tile_size + 1, tile_size - 2, tile_size - 2);
     }
